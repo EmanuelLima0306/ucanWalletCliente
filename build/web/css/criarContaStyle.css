@@ -1,0 +1,33 @@
+:root {
+    --cor-primaria: #626262;
+    --cor-secundaria: #00ff00;
+    --cor-background: #545454;
+    --cor-white: #fff;
+    --cor-blue-light: #7DD0FF;
+    --cor-blue-dark: #4ABDFF;
+    --cor-black: #1D1D1D;
+    --tamanho-fonte-max: 16px;
+    --tamanho-fonte-average: 14px;
+    --tamanho-fonte-min: 12px;
+
+}
+
+
+
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    /*border: 1px solid #ddd;*/
+    /*border-radius: 5px;*/
+    /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container .form-group {
+    margin-bottom: 20px;
+}

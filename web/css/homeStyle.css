@@ -1,0 +1,311 @@
+:root {
+    --cor-primaria: #1e1f2499;
+    --cor-secundaria-1: #1e1f24;
+    --cor-background-1: #141518;
+    --cor-white: #fff;
+    --cor-blue-light: #135bcf;
+    --cor-green: #47c363;
+    --cor-blue-dark: #4ABDFF;
+    --cor-black: #1D1D1D;
+    --cor-text-white: white;
+    --cor-text-gray:#8991ac;
+    --tamanho-fonte-max: 16px;
+    --tamanho-fonte-average: 14px;
+    --tamanho-fonte-min: 12px;
+}
+body {
+    font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    background-color: #3c373e;
+    font-weight: 300;
+}
+
+p {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+a {
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+}
+a, a:hover {
+    text-decoration: none !important;
+}
+
+.content {
+    padding: 7rem 0;
+}
+
+h2 {
+    font-size: 20px;
+    color: #fff;
+}
+
+
+.body-page{
+    background-color: var(--cor-background-1);
+
+}
+
+.navbar {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    height: 60px;
+}
+
+.navbar .navbar-brand {
+    margin-left: 20px;
+    font-weight: bold;
+    color: #333;
+    font-size: 20px;
+}
+
+.navbar .user-profile {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 15px;
+    text-align: right;
+}
+
+.navbar .user-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.navbar .user-profile .user-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+/*Estilo das modal*/
+.modal-body{
+    border-top: 1px solid #0d6efd99;
+}
+/* Estilos das divs no centro */
+.sidebar {
+    height: 100vh;
+    padding: 20px;
+}
+
+.account-card{
+    height: 170px;
+    max-height: 170px;
+
+}
+.btn-nova-conta{
+    height: 60px;
+    max-height: 60px;
+    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-radius: 20px 20px 20px 20px;
+    padding: 20px;
+    text-align: center;
+    background-color: #1e1f2499;
+    color: var(--cor-text-white);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.sidebar .account-card {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-radius: 20px 20px 0px 0px;
+    padding: 20px;
+    text-align: center;
+    background-color: #1e1f2499;
+    color: var(--cor-text-white);
+    opacity: 0.8;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+.top-row {
+    height: 20%;
+    margin-bottom: 20px;
+    background-color: #1e1f2499;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    opacity: 0.8;
+    color: var(--cor-text-white);
+}
+
+.bottom-row {
+    height: 80%;
+    background-color: #1e1f2499;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    color: var(--cor-text-white);
+}
+
+.card-modal{
+    height: 80%;
+    background-color: #1e1f2499 !important;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    color: var(--cor-text-white);
+}
+
+.account-card.selected {
+    border: 1px solid #0d6efd;
+    background-color: var(--cor-background-1);
+}
+
+/*Estilo dos textos*/
+
+.titleWhite{
+    color: white;
+    font-size: 18px;
+}
+.sub-titleWhite{
+    color: white;
+    font-size: 12px;
+}
+
+.sub-titleWhite{
+    color: white;
+    font-size: 12px;
+}
+
+.titleGray{
+    color: #8991ac;
+    font-size: 18px;
+}
+.sub-titleGray{
+    color: #8991ac;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/*Estilo de button*/
+
+.transparent-card{
+    border: 0.5px solid rgba(255,255,255,0.5);
+    border-radius: 20px;
+    background-color: rgba(0,0,0,0.2) !important;
+    color: rgba(255,255,255,1);
+    text-align: center;
+    cursor: pointer;
+    width: 120px;
+}
+
+/*Estilo dos cards do topo*/
+.body-progress{
+    justify-items: start;
+}
+.progress{
+    margin: 2px;
+}
+.progress-entrada{
+    background-color: #0d6efd!important;
+}
+
+.progress-saida{
+    background-color: var(--cor-green)!important;
+
+}
+
+/*Estilo da tabela de transações*/
+.custom-table {
+    min-width: 900px;
+    padding-top: 50px !important;
+}
+.custom-table thead tr, .custom-table thead th {
+    padding-bottom: 30px;
+    border-top: none;
+    border-bottom: none !important;
+    color: #fff;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .2rem;
+    background-color: transparent !important;
+}
+.custom-table tbody th, .custom-table tbody td {
+    color: #777;
+    font-weight: 400;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    font-weight: 300;
+    border: none;
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+    background-color: transparent !important;
+}
+.custom-table tbody th small, .custom-table tbody td small {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 300;
+}
+.custom-table tbody th a, .custom-table tbody td a {
+    color: rgba(255, 255, 255, 0.3);
+}
+.custom-table tbody th .more, .custom-table tbody td .more {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .2rem;
+}
+.custom-table tbody tr {
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+}
+.custom-table tbody tr:hover td, .custom-table tbody tr:focus td {
+    color: #fff;
+}
+.custom-table tbody tr:hover td a, .custom-table tbody tr:focus td a {
+    color: #fdd114;
+}
+.custom-table tbody tr:hover td .more, .custom-table tbody tr:focus td .more {
+    color: #fdd114;
+}
+.custom-table .td-box-wrap {
+    padding: 0;
+}
+.custom-table .box {
+    background: #fff;
+    border-radius: 4px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.custom-table .box td, .custom-table .box th {
+    border: none !important;
+}
+
+/*Estilo do botao logout*/
+#buttonLogout{
+    border: none;
+    color: red !important; /* Cor do texto */
+    cursor: pointer;
+}
+
+.divContas{
+    max-height: 570px;
+    overflow-y: auto;
+}
+.divContas::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+}
+
+.divContas::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0); /* Cor da barra de rolagem */
+}
+
+.divContas::-webkit-scrollbar-track {
+    background-color: transparent; /* Cor de fundo da barra de rolagem (transparente) */
+}
+

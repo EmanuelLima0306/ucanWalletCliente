@@ -1,0 +1,44 @@
+:root {
+    --cor-primaria: #626262;
+    --cor-secundaria: #00ff00;
+    --cor-background: #545454;
+    --cor-white: #fff;
+    --cor-blue-light: #7DD0FF;
+    --cor-blue-dark: #4ABDFF;
+    --cor-black: #1D1D1D;
+    --tamanho-fonte-max: 16px;
+    --tamanho-fonte-average: 14px;
+    --tamanho-fonte-min: 12px;
+
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 50px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-group.invalid input {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.btn-primary {
+    margin-top: 10px;
+}
