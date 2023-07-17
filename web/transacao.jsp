@@ -27,7 +27,7 @@
                         <input type="number" class="form-control" id="valor" name="valor" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Transferir</button>
+                    <button type="button" class="btn btn-primary">Transferir</button>
                     <div class="mt-5 row justify-content-center login-form__footer" style="color:red;"> 
                         <%=(request.getAttribute("typeMessage") != null ? request.getAttribute("typeMessage") : "")%>
                     </div>

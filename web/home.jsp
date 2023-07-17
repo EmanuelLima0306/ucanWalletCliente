@@ -26,6 +26,7 @@
             List<TransacaoModel> transacaoModels = (List<TransacaoModel>) request.getSession().getAttribute("transacoes");
             boolean isConta = contaSelecionada != null;
         %>
+        <input class="contaSelecionada" id="<%= isConta ? contaSelecionada.getPkConta().intValue() : 0%>" type="hidden">
         <!-- Menu no topo -->
         <nav class="navbar navbar-expand-lg" style="background-color: var(--cor-background-1)">
             <a class="navbar-brand" href="#">UcanWallet</a>
@@ -47,20 +48,20 @@
             <div class="row">
                 <div class="col-2 sidebar">
                     <div class="divContas">
-                    <!-- Cards de contas do usuário -->
-                    <%
+                        <!-- Cards de contas do usuário -->
+                        <%
 
-                        for (int indexConta = 0; indexConta < contas.size(); indexConta++) {
-                    %>
-                    <div class="account-card <%= contaSelecionada.getPkConta() == contas.get(indexConta).getPkConta() ? "selected" : ""%>" data="<%=contas.get(indexConta).getPkConta()%>" onclick="selectAccount(this)">
-                        Nº Conta: <%=contas.get(indexConta).getNumeroConta()%>
-                        Saldo Disp.: <%=contas.get(indexConta).getSaldoDisponivel()%>
+                            for (int indexConta = 0; indexConta < contas.size(); indexConta++) {
+                        %>
+                        <div class="account-card <%= contaSelecionada.getPkConta() == contas.get(indexConta).getPkConta() ? "selected" : ""%>" data="<%=contas.get(indexConta).getPkConta()%>" onclick="selectAccount(this)">
+                            Nº Conta: <%=contas.get(indexConta).getNumeroConta()%>
+                            Saldo Disp.: <%=contas.get(indexConta).getSaldoDisponivel()%>
 
-                        <canvas class="meuGrafico"></canvas>
-                    </div>
-                    <%
-                        }
-                    %>
+                            <canvas class="meuGrafico"></canvas>
+                        </div>
+                        <%
+                            }
+                        %>
                     </div>
                     <div class="btn-nova-conta" onclick="" data-bs-toggle="modal" data-bs-target="#modal-criar-conta">+ Conta</div>
                     <!-- Adicione mais cards de contas aqui -->
@@ -130,7 +131,7 @@
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tbody">
 
                                     <% for (int i = 0; i < transacaoModels.size(); i++) {%>
                                     <tr scope="row">
@@ -144,7 +145,7 @@
                                             <%= transacaoModels.get(i).getContaDestino().getNumeroConta()%>
                                             <small class="d-block"><%= transacaoModels.get(i).getContaDestino().getClienteModel().getPessoaModel().getNomeCompleto()%></small>
                                         </td>
-                                        <td><a href="#"><%=contaSelecionada.getPkConta() == transacaoModels.get(i).getContaOrigem().getPkConta() ? "-" + transacaoModels.get(i).getValor() : "+"+transacaoModels.get(i).getValor()%></a></td>
+                                        <td><a href="#"><%=contaSelecionada.getPkConta() == transacaoModels.get(i).getContaOrigem().getPkConta() ? "-" + transacaoModels.get(i).getValor() : "+" + transacaoModels.get(i).getValor()%></a></td>
                                         <td><%= transacaoModels.get(i).getDataTransacao()%></td>
                                         <td><%= transacaoModels.get(i).getDataValidacao()%></td>
                                         <td><a href="#" class="more"><%= transacaoModels.get(i).getEstado().toString()%></a></td>
@@ -195,7 +196,28 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <jsp:include page="transacao.jsp"/>
+                        <div class="container">
+                            <div class="form-container">
+                                <h2 class="titleWhite">Transferência</h2>
+                                <form method="POST" action="transacao">
+                                    <div class="form-group">
+                                        <label class="sub-titleWhite" for="saldo">Número de conta:</label>
+                                        <input type="number" class="form-control" id="numeroConta" name="numeroConta" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sub-titleWhite" for="saldo">Valor:</label>
+                                        <input type="number" class="form-control" id="valor" name="valor" required>
+                                    </div>
+
+                                    <button type="submit" id="button-transferir" class="btn btn-primary">Transferir</button>
+                                    <div class="mt-5 row justify-content-center login-form__footer" style="color:red;"> 
+                                        <%=(request.getAttribute("typeMessage") != null ? request.getAttribute("typeMessage") : "")%>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                        <%--<jsp:include page="transacao.jsp"/> codigo para incluir outra pagina--%>
                     </div>
                     <%--<div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -204,6 +226,11 @@
                 </div>
             </div>
         </div>
+
+        <audio id="meuAudio">
+            <source src="audio/notifile.mp3" type="audio/mpeg">
+            <!-- Adicione outras tags <source> para suportar outros formatos de áudio, se necessário -->
+        </audio>
 
 
         <%-- JS of bootstrap --%>    

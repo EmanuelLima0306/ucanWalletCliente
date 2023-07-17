@@ -7,10 +7,6 @@ function selectProvincia() {
     selectElement.innerHTML = "";
 
     if (provinciaSelecionada !== "null") {
-        
-        var dados = {
-            provinciaID: provinciaSelecionada
-        };
 
         // Defina as opções da requisição
         var options = {
@@ -37,8 +33,6 @@ function selectProvincia() {
                     // Crie um elemento div temporário para armazenar a resposta como HTML
                     var tempDiv = document.createElement("div");
 
-
-
                     tempDiv.insertAdjacentHTML("beforeend", data);
 
                     // Obtenha todas as opções do elemento select da resposta
@@ -62,4 +56,38 @@ function selectProvincia() {
                 });
     }
 
+}
+
+function submitForm() {
+    var formElement = document.getElementById('registration-form');
+//    var formData = new FormData(formElement);
+    const data = new URLSearchParams();
+    for (const pair of new FormData(formElement)) {
+        data.append(pair[0], pair[1]);
+    }
+
+    console.log(data);
+    fetch(formElement.action, {
+        method: 'POST',
+        body: data
+    }).then(function (response) {
+        // Verifique se a resposta foi bem-sucedida
+        if (response.ok) {
+            return response.text(); // Retorna a resposta como texto
+        } else {
+            throw new Error('Erro na requisição: ' + response.status);
+        }
+    }).then(function (data) {
+        // Crie um elemento div temporário para armazenar a resposta como HTML
+        var tempDiv = document.createElement("div");
+
+        tempDiv.insertAdjacentHTML("beforeend", data);
+
+        var messagemAntiga = document.querySelector("#divMenssagem");
+        var messageNova = tempDiv.querySelector("#divMenssagem");
+        messagemAntiga.innerHTML = messageNova.innerHTML;
+    }).catch(function (error) {
+                // Lógica de tratamento de erros
+                console.error(error);
+            });
 }

@@ -16,15 +16,15 @@ import java.sql.Timestamp;
  */
 public class TransacaoServer {
     private BigInteger pkContaOrigem;
-    private int numeroContaDestino;
-    private double valor;
-    private TipoMensagem tipoMensagem;
-    private Timestamp dataTransacao;
+    private byte[] numeroContaDestino;
+    private byte[] valor;
+    private byte[] tipoMensagem;
+    private byte[] dataTransacao;
 
     public TransacaoServer() {
     }
 
-    public TransacaoServer(BigInteger pkContaOrigem, int numeroContaDestino, double valor, TipoMensagem tipoMensagem, Timestamp dataTransacao) {
+    public TransacaoServer(BigInteger pkContaOrigem, byte[] numeroContaDestino, byte[] valor, byte[] tipoMensagem, byte[] dataTransacao) {
         this.pkContaOrigem = pkContaOrigem;
         this.numeroContaDestino = numeroContaDestino;
         this.valor = valor;
@@ -41,35 +41,35 @@ public class TransacaoServer {
         this.pkContaOrigem = pkContaOrigem;
     }
 
-    public int getNumeroContaDestino() {
+    public byte[] getNumeroContaDestino() {
         return numeroContaDestino;
     }
 
-    public void setNumeroContaDestino(int numeroContaDestino) {
+    public void setNumeroContaDestino(byte[] numeroContaDestino) {
         this.numeroContaDestino = numeroContaDestino;
     }
 
-    public double getValor() {
+    public byte[] getValor() {
         return valor;
     }
 
-    public void setValor(double valor) {
+    public void setValor(byte[] valor) {
         this.valor = valor;
     }
 
-    public TipoMensagem getTipoMensagem() {
+    public byte[] getTipoMensagem() {
         return tipoMensagem;
     }
 
-    public void setTipoMensagem(TipoMensagem tipoMensagem) {
+    public void setTipoMensagem(byte[] tipoMensagem) {
         this.tipoMensagem = tipoMensagem;
     }
 
-    public Timestamp getDataTransacao() {
+    public byte[] getDataTransacao() {
         return dataTransacao;
     }
 
-    public void setDataTransacao(Timestamp dataTransacao) {
+    public void setDataTransacao(byte[] dataTransacao) {
         this.dataTransacao = dataTransacao;
     }
     

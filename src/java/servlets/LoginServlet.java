@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jms.ClienteJMS;
 import model.PessoaModel;
 import model.UsuarioModel;
 
@@ -22,10 +23,13 @@ import model.UsuarioModel;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet", "/login"})
 public class LoginServlet extends HttpServlet {
 
+    ClienteJMS clienteJMS;
+
     @Override
     public void init() throws ServletException {
         super.init(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         log("Iniciando o Sevlet");
+
     }
 
     @Override
@@ -56,6 +60,11 @@ public class LoginServlet extends HttpServlet {
             if (tipoMensagem == TipoMensagem.SUCESSO) {
                 req.getSession().setAttribute("Usuario", usuarioBean.getModel());
                 req.getSession().setMaxInactiveInterval(3600);//aumenta o tempo da sessao para 1h
+
+                //Cria uma instância do JMS
+                clienteJMS = new ClienteJMS();
+                //Ouvir as mensagens
+                clienteJMS.consumer(usuarioBean.getModel());
 //            RequestDispatcher rd = req.getRequestDispatcher("/home");
 //            rd.forward(req, resp);
                 resp.sendRedirect("home");
@@ -63,8 +72,10 @@ public class LoginServlet extends HttpServlet {
                 req.setAttribute("typeMessage", TipoMensagem.USUARIO_OU_SENHA_INVALIDA.getDescricao());
                 req.getRequestDispatcher("index.jsp").forward(req, resp);
             }
-        }else
-        if(action.equals("logout")){
+        } else if (action.equals("logout")) {
+            // fecha a conexão do jms
+            clienteJMS.closeConnection();
+
             req.getSession().setAttribute("Usuario", null);
             req.getRequestDispatcher("index.jsp").forward(req, resp);
         }

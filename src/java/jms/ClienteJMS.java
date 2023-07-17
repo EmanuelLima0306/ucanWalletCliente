@@ -1,124 +1,129 @@
 
 package jms;
 
+import bean.ContaBean;
+import com.google.gson.Gson;
+import enumerator.TipoMensagem;
+import incriptacao.RSAEncryption;
+import incriptacao.RSAKeyUtils;
+import java.security.PrivateKey;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
+import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
-import javax.jms.TopicPublisher;
-import javax.jms.TopicSession;
-import javax.jms.TopicSubscriber;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import model.TransacaoModel;
+import model.ContaModel;
+import model.UsuarioModel;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQQueue;
+import util.TransacaoServer;
 
 /**
  *
  * @author emanuellima
  */
-public class ClienteJMS implements MessageListener {
+public class ClienteJMS {
 
-    public TopicConnection connection;
-    private TopicSession session;
-    private TopicPublisher publisher;
+    // Atributos jms
+    private static UsuarioModel usuarioModel;
+    private ConnectionFactory connectionFactory;
+    Connection connection;
+    Session session;
+    private Destination filaValidador;
+    Destination filaRetorno;
+    MessageConsumer consumer;
 
-    public ClienteJMS(String topicName, String initialContextFactory, String providerUrl) {
+    public ClienteJMS() {
+        try{
+        // Inicializar a ConnectionFactory com a configuração adequada
+        connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+
+        // Definir a fila de validação de transações
+        filaValidador = new ActiveMQQueue("fila.validacao");
+        filaRetorno = new ActiveMQQueue("fila.resposta");
+        connection = connectionFactory.createConnection();
+        connection.start();
+        session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+        // Criar um consumidor para receber a resposta
+        consumer = session.createConsumer(filaRetorno);
+        }catch(Exception ex){
+            System.err.println(ex);
+        }
+    }
+
+    
+    public void sendMessage(TransacaoServer transacaoServer) {
         try {
+            MessageProducer producer = session.createProducer(filaValidador);
+
+            // Converter a transação em uma mensagem JMS
+            TextMessage textMessage = session.createTextMessage(transacaoServer.toJson());
+            textMessage.setJMSReplyTo(filaValidador);
+
+            producer.send(textMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void consumer(UsuarioModel usuario) {
+        try {
+            usuarioModel = usuario;
             
-            // Configurar a conexão JMS
-            java.util.Properties properties = new java.util.Properties();
-            properties.setProperty(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
-            properties.setProperty(Context.PROVIDER_URL, providerUrl);
-            Context context = new InitialContext(properties);
-            TopicConnectionFactory factory = (TopicConnectionFactory) context.lookup("ConnectionFactory");
-            connection = factory.createTopicConnection();
-            session = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-//            Topic topic = (Topic) context.lookup(topicName);
-            Topic topic = (Topic) session.createTopic(topicName);
+            consumer.setMessageListener(new MessageListener() {
+                @Override
+                public void onMessage(Message message) {
+                    try {
+                        if (message instanceof TextMessage) {
+                            TextMessage respostaMessage = (TextMessage) message;
+                            String resposta = respostaMessage.getText();
+                            Gson gson = new Gson();
+                            TransacaoServer transacaoServer1 = gson.fromJson(resposta, TransacaoServer.class);
 
-            // Criar o publicador para enviar mensagens
-            publisher = session.createPublisher(topic);
+                            //Recuperação da conta de origem
+                            ContaBean contaBean = new ContaBean();
+                            contaBean.findById(transacaoServer1.getPkContaOrigem().intValue());
+                            ContaModel contaOrigem = contaBean.getModel();
+                            //Recuperação da chave privada
+                            PrivateKey privateKey = RSAKeyUtils.privateKeyFromBytes(contaOrigem.getChavePrivada());
 
-            // Configurar o assinante para receber mensagens
-            TopicSubscriber subscriber = session.createSubscriber(topic);
-            subscriber.setMessageListener(this);
-
-            // Iniciar a conexão JMS
-            connection.start();
-        } catch (Exception e) {
-            System.err.print(e);
-        }
-    }
-
-//    private ConnectionFactory connectionFactory;
-//    private Destination filaValidador;
-//    public void enviarTransacao(TransacaoModel transacaoModel) {
-//        try {
-//            Context ctx = new InitialContext();
-////            connectionFactory = (ConnectionFactory) ctx.lookup("java:comp/env/jms/myQueueFactory");
-//            connectionFactory = (ConnectionFactory) ctx.lookup("ConnectionFactory");
-//            Connection connection = connectionFactory.createConnection();
-//            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-//            filaValidador = session.createQueue("fila_validador");
-//            MessageProducer producer = session.createProducer(filaValidador);
-//
-//            // Converter a transação em uma mensagem JMS
-//            TextMessage textMessage = session.createTextMessage(transacaoModel.toJson());
-//
-//            // Definir a fila de retorno para receber a resposta do servidor
-//            Destination filaRetorno = session.createTemporaryQueue();
-//            textMessage.setJMSReplyTo(filaRetorno);
-//
-//            // Criar um consumidor para receber a resposta
-//            MessageConsumer consumer = session.createConsumer(filaRetorno);
-//
-//            consumer.setMessageListener(new MessageListener() {
-//                public void onMessage(Message message) {
-//                    try {
-//                        if (message instanceof TextMessage) {
-//                            TextMessage respostaMessage = (TextMessage) message;
-//                            String resposta = respostaMessage.getText();
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//
-//            producer.send(textMessage);
-//
-//            producer.close();
-//            session.close();
-//            connection.close();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-    public void sendMessage(TransacaoModel transacaoModel) {
-        try {
-            TextMessage message = session.createTextMessage();
-            message.setText(transacaoModel.toJson());
-            publisher.publish(message);
+                            //Verifica se a pessoa que recebeu a resposta e a pessoa predestinada
+                            if (usuarioModel.getPessoaModel().getPkPessoa().intValue() == contaOrigem.getClienteModel().getPessoaModel().getPkPessoa().intValue()) {
+                                message.acknowledge();
+                                System.out.println("Usuario predestinado recebeu:::");
+                                
+                                TipoMensagem tipoMensagem = (TipoMensagem) RSAEncryption.decrypt(transacaoServer1.getTipoMensagem(), privateKey);
+//                                req.setAttribute("typeMessage", tipoMensagem.getDescricao());
+//                                resp.sendRedirect("/home");
+                            }else{
+                                 System.out.println("Usuario não predestinado recebeu:::");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void onMessage(Message message) {
-        try {
-            if (message instanceof TextMessage) {
-                TextMessage textMessage = (TextMessage) message;
-                System.out.println("Mensagem recebida: " + textMessage.getText());
+    
+    public void closeConnection(){
+        if(connection != null){
+            try {
+                connection.close();
+            } catch (JMSException ex) {
+                Logger.getLogger(ClienteJMS.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
     }
 
 }

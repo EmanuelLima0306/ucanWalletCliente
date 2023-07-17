@@ -151,8 +151,8 @@
                         %>        
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Criar Conta</button>
-                <div class="mt-5 row justify-content-center login-form__footer" style="color:red;"> 
+                <button type="button" onclick="submitForm()" class="btn btn-primary">Criar Conta</button>
+                <div id="divMenssagem" class="mt-5 row justify-content-center login-form__footer" style="color:red;"> 
                     <%=(request.getAttribute("typeMessage") != null ? request.getAttribute("typeMessage") : "")%>
                 </div>
             </form>

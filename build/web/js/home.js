@@ -1,10 +1,13 @@
 
 document.addEventListener("DOMContentLoaded", function () {
+
     // Seu código JavaScript aqui
     getGraphicsCardCont();
+    getTransacoes();
 });
 
-function eventButtonLogout(){
+
+function eventButtonLogout() {
     document.getElementById('formLogout').submit();
 }
 
@@ -51,15 +54,15 @@ function getGraphicsCardCont() {
 
 
 function copiarChavePublica() {
-  var publicKeyInput = document.getElementById("publicKeyInput");
-  publicKeyInput.select();
-  publicKeyInput.setSelectionRange(0, 99999); // Para dispositivos móveis
+    var publicKeyInput = document.getElementById("publicKeyInput");
+    publicKeyInput.select();
+    publicKeyInput.setSelectionRange(0, 99999); // Para dispositivos móveis
 
-  navigator.clipboard.writeText(publicKeyInput.value).then(function() {
-    alert("Chave pública copiada para a área de transferência!");
-  }, function() {
-    alert("Falha ao copiar a chave pública.");
-  });
+    navigator.clipboard.writeText(publicKeyInput.value).then(function () {
+        alert("Chave pública copiada para a área de transferência!");
+    }, function () {
+        alert("Falha ao copiar a chave pública.");
+    });
 }
 
 
@@ -112,3 +115,67 @@ function selectAccount(card) {
             });
 
 }
+
+function getTransacoes() {
+
+    setInterval(function () {
+
+        var contaSelecionada = document.querySelector(".contaSelecionada");
+        var idConta = contaSelecionada.id;
+
+        var options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        // Especifique a URL da sua servlet
+        var url = 'transacao?idConta=' + idConta;
+
+        // Faça a requisição POST usando fetch
+        fetch(url, options)
+                .then(function (response) {
+                    // Verifique se a resposta foi bem-sucedida
+                    if (response.ok) {
+                        return response.text(); // Retorna a resposta como texto
+                    } else {
+                        throw new Error('Erro na requisição: ' + response.status);
+                    }
+                })
+                .then(function (data) {
+                    // Crie um elemento div temporário para armazenar a resposta como HTML
+                    var tempDiv = document.createElement("div");
+
+                    tempDiv.insertAdjacentHTML("beforeend", data);
+
+                    var tbodyResponse = tempDiv.querySelector("#tbody");
+                    var tbodyPagina = document.querySelector("#tbody");
+
+                    //Verifica se as listagem de transações são iguais...
+                    if (tbodyResponse.innerHTML === tbodyPagina.innerHTML) {
+                    } else {
+                        tbodyPagina.innerHTML = tbodyResponse.innerHTML;
+                        emitirSomDoSistema();
+                        
+
+                    }
+
+                })
+                .catch(function (error) {
+                    // Lógica de tratamento de erros
+                    console.error(error);
+                });
+    }, 500);
+
+}
+
+function emitirSomDoSistema() {
+    var meuAudio = document.getElementById('meuAudio');
+    meuAudio.play();
+}
+
+
+
+
+

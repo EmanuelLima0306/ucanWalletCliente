@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jms.ClienteJMS;
 import model.ContaModel;
 import model.TransacaoModel;
 import model.UsuarioModel;
@@ -32,12 +33,12 @@ public class HomeServlet extends HttpServlet {
     String contasAtribute = "contas";
     String contaSelectedAtribute = "contaSelected";
     String transacoes = "transacoes";
+    
 
     @Override
     public void init() throws ServletException {
         super.init(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         log("Iniciando a Home");
-
     }
 
     @Override
@@ -45,7 +46,6 @@ public class HomeServlet extends HttpServlet {
         super.destroy(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         log("Destruindo a home");
     }
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -69,6 +69,7 @@ public class HomeServlet extends HttpServlet {
         } else {
             response.sendRedirect("erro401.jsp");// chama a pagina de erro de autenticação
         }
+
     }
 
     @Override
@@ -90,7 +91,7 @@ public class HomeServlet extends HttpServlet {
             request.getSession().setAttribute(contaSelectedAtribute, contaModel);
             RequestDispatcher rd = request.getRequestDispatcher("home.jsp"); // chamo a pagina home
             rd.forward(request, response);
-        }else{
+        } else {
             UsuarioModel usuarioModel = (UsuarioModel) request.getSession().getAttribute("Usuario");
             List<ContaModel> contas = contaBean.getAllByPessoa(usuarioModel.getPessoaModel()); // busca todas as contas da pessoa logada
             request.getSession().setAttribute(contasAtribute, contas); // carrego a lista de contas
@@ -98,8 +99,6 @@ public class HomeServlet extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("home.jsp"); // chamo a pagina home
             rd.forward(request, response);
         }
-        RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
-        rd.forward(request, response);
     }
 
     /**

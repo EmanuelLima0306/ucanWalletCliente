@@ -101,14 +101,14 @@ public class CadastrarClienteServlet extends HttpServlet {
             mensageResponse = bean.saveOrUpdate(confirmarSenha);
 
             if (mensageResponse == TipoMensagem.SUCESSO) {
-                req.setAttribute("typeMessage", mensageResponse.getDescricao());
-                requestDispatcher(req, resp);//rencaminha a pagina
+                resp.sendRedirect("login");
             } else {
                 req.setAttribute("typeMessage", mensageResponse.getDescricao());
-                req.getRequestDispatcher("cadastrarCliente.jsp").forward(req, resp);
+                requestDispatcher(req, resp);
             }
         }
-
+        req.setAttribute("typeMessage", mensageResponse.getDescricao());
+        requestDispatcher(req, resp);
     }
     
    public void requestDispatcher(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
