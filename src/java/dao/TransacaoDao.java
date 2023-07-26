@@ -172,5 +172,32 @@ public class TransacaoDao {
         }
         return lista;
     }
+    public List<TransacaoModel> findByContaAndPesquisa(ContaModel contaModel,String pesquisa) throws Exception {
+        var query = "SELECT * FROM transacoes transacoes INNER JOIN contas contaorigem ON contaorigem.pkconta=transacoes.fkcontaorigem WHERE fkcontaorigem = ? OR fkcontadestino = ? AND CAST(contaorigem.numeroconta AS VARCHAR) like ? ";
+        var ps = connection.prepareStatement(query);
+        ps.setInt(1, contaModel.getPkConta().intValue());
+        ps.setInt(2, contaModel.getPkConta().intValue());
+        ps.setString(3, "'%"+pesquisa+"%'");
+        var rs = ps.executeQuery();
+        List<TransacaoModel> lista = new ArrayList<>();
+        while (rs.next()) {
+            TransacaoModel model = new TransacaoModel();
+            model.setPkTransacao(rs.getBigDecimal("pktransacao").toBigInteger());
+            model.setContaOrigem(new ContaDao().findById(rs.getBigDecimal("fkcontaorigem").intValue()));
+            model.setContaDestino(new ContaDao().findById(rs.getBigDecimal("fkcontadestino").intValue()));
+
+            //Converte a chave publica de byte para publickey
+            PrivateKey privateKey = RSAKeyUtils.privateKeyFromBytes(model.getContaDestino().getChavePrivada());
+            
+            model.setValor((double) RSAEncryption.decrypt(rs.getBytes("valor"), privateKey));
+            model.setDataTransacao((Timestamp) RSAEncryption.decrypt(rs.getBytes("datatransacao"), privateKey));
+            model.setDataValidacao((Timestamp) RSAEncryption.decrypt(rs.getBytes("datavalidacao"), privateKey));
+            
+            model.setEstado(Estado.valueOf((String) RSAEncryption.decrypt(rs.getBytes("estado"), privateKey)));
+            
+            lista.add(model);
+        }
+        return lista;
+    }
 
 }

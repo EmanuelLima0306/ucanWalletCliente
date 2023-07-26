@@ -91,3 +91,8 @@ function submitForm() {
                 console.error(error);
             });
 }
+
+function  loginRedirect(){
+    // Redirecionar para a servlet
+  window.location.href = "login";
+}

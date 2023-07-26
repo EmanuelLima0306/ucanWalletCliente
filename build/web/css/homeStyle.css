@@ -309,3 +309,13 @@ h2 {
     background-color: transparent; /* Cor de fundo da barra de rolagem (transparente) */
 }
 
+
+#campoPesquisa{
+    color: #8991ac !important;
+    background-color: black;
+    width: 300px;
+}
+
+#campoPesquisa::placeholder {
+  color: white; /* Altere a cor para a cor desejada */
+}

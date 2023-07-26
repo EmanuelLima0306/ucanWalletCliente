@@ -152,6 +152,7 @@
                     </select>
                 </div>
                 <button type="button" onclick="submitForm()" class="btn btn-primary">Criar Conta</button>
+                <button type="button" onclick="loginRedirect()" class="btn btn-primary">Login</button>
                 <div id="divMenssagem" class="mt-5 row justify-content-center login-form__footer" style="color:red;"> 
                     <%=(request.getAttribute("typeMessage") != null ? request.getAttribute("typeMessage") : "")%>
                 </div>

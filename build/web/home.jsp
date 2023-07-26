@@ -118,6 +118,9 @@
                         <!-- Conteúdo da segunda div na parte inferior -->
 
                         <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="campoPesquisa" placeholder="Digite para pesquisar">
+                            </div>
 
                             <table class="table table-striped custom-table">
                                 <thead>
@@ -128,7 +131,12 @@
                                         <th scope="col">Valor</th>
                                         <th scope="col">Data Envio</th>
                                         <th scope="col">Data Validação</th>
-                                        <th scope="col"></th>
+                                        <th scope="col">
+                                            <form method="POST" action="extrato">
+                                                <input type="hidden" name="action" value="extrato">
+                                                <button type="submit">PDF</button>
+                                            </form>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody">

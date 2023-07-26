@@ -5,6 +5,7 @@
 package bean;
 
 import dao.TransacaoDao;
+import enumerator.Estado;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,7 +37,35 @@ public class TransacaoBean {
         try {
             transacaoDao = new TransacaoDao();
             if (contaModel != null) {
-                list = transacaoDao.findByConta(contaModel);
+                for (TransacaoModel transacao : transacaoDao.findByConta(contaModel)) {
+                    if (transacao.getContaDestino().getPkConta().intValue() == contaModel.getPkConta().intValue() && transacao.getEstado() == Estado.VALIDA) {
+                        list.add(transacao);
+                    } else {
+                        if (transacao.getContaOrigem().getPkConta().intValue() == contaModel.getPkConta().intValue()) {
+                            list.add(transacao);
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(TransacaoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    public List<TransacaoModel> getByContaAndPesquisa(ContaModel contaModel,String pesquisa) {
+        List<TransacaoModel> list = new ArrayList<>();
+        try {
+            transacaoDao = new TransacaoDao();
+            if (contaModel != null) {
+                for (TransacaoModel transacao : transacaoDao.findByContaAndPesquisa(contaModel,pesquisa)) {
+                    if (transacao.getContaDestino().getPkConta().intValue() == contaModel.getPkConta().intValue() && transacao.getEstado() == Estado.VALIDA) {
+                        list.add(transacao);
+                    } else {
+                        if (transacao.getContaOrigem().getPkConta().intValue() == contaModel.getPkConta().intValue()) {
+                            list.add(transacao);
+                        }
+                    }
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(TransacaoBean.class.getName()).log(Level.SEVERE, null, ex);

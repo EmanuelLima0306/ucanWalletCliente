@@ -100,12 +100,6 @@ public class CadastrarClienteServlet extends HttpServlet {
 
             mensageResponse = bean.saveOrUpdate(confirmarSenha);
 
-            if (mensageResponse == TipoMensagem.SUCESSO) {
-                resp.sendRedirect("login");
-            } else {
-                req.setAttribute("typeMessage", mensageResponse.getDescricao());
-                requestDispatcher(req, resp);
-            }
         }
         req.setAttribute("typeMessage", mensageResponse.getDescricao());
         requestDispatcher(req, resp);

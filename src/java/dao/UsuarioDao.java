@@ -29,7 +29,7 @@ public class UsuarioDao {
     }
 
     public boolean insert(UsuarioModel usuarioModel) throws Exception {
-        var query = "INSERT INTO usuarios(fkpessoa,tipousuario,senha) values(?,?,?)";
+        var query = "INSERT INTO usuarios(fkpessoa,tipousuario,senha) values(?,?,MD5(?))";
 
         var ps = connection.prepareStatement(query);
         ps.setInt(1, usuarioModel.getPessoaModel().getPkPessoa().intValue());
@@ -40,7 +40,7 @@ public class UsuarioDao {
     }
 
     public boolean update(UsuarioModel usuarioModel) throws Exception {
-        var query = "UPDATE usuarios SET fkpessoa=?, tipousuario=?,senha=? WHERE pkusuario = ?";
+        var query = "UPDATE usuarios SET fkpessoa=?, tipousuario=?,senha= MD5(?) WHERE pkusuario = ?";
 
         var ps = connection.prepareStatement(query);
         ps.setInt(1, usuarioModel.getPessoaModel().getPkPessoa().intValue());
@@ -66,7 +66,7 @@ public class UsuarioDao {
     }
     
     public UsuarioModel autenticacao(UsuarioModel usuarioModel) throws Exception {
-        var query = "SELECT * FROM usuarios usuarios INNER JOIN pessoas pessoas ON usuarios.fkpessoa=pessoas.pkpessoa WHERE pessoas.email = ? AND usuarios.senha = ?";
+        var query = "SELECT * FROM usuarios usuarios INNER JOIN pessoas pessoas ON usuarios.fkpessoa=pessoas.pkpessoa WHERE pessoas.email = ? AND usuarios.senha = MD5(?)";
 
         var ps = connection.prepareStatement(query);
         ps.setString(1, usuarioModel.getPessoaModel().getEmail());

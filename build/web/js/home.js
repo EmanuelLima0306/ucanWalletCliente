@@ -4,8 +4,55 @@ document.addEventListener("DOMContentLoaded", function () {
     // Seu código JavaScript aqui
     getGraphicsCardCont();
     getTransacoes();
+    pesquisa();
 });
 
+function pesquisa() {
+    var campoPesquisa = document.getElementById("campoPesquisa");
+    campoPesquisa.addEventListener("keyup", function () {
+
+        // Obter o texto digitado no campo de pesquisa
+        var textoPesquisa = campoPesquisa.value.toLowerCase();
+        console.log(textoPesquisa);
+        var options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        // Especifique a URL da sua servlet
+        var url = 'pesquisa?textoPesquisa=' + textoPesquisa;
+
+        // Faça a requisição POST usando fetch
+        fetch(url, options)
+                .then(function (response) {
+                    // Verifique se a resposta foi bem-sucedida
+                    if (response.ok) {
+                        return response.text(); // Retorna a resposta como texto
+                    } else {
+                        throw new Error('Erro na requisição: ' + response.status);
+                    }
+                })
+                .then(function (data) {
+                    // Crie um elemento div temporário para armazenar a resposta como HTML
+                    var tempDiv = document.createElement("div");
+
+                    tempDiv.insertAdjacentHTML("beforeend", data);
+
+                    var tbodyResponse = tempDiv.querySelector("#tbody");
+                    var tbodyPagina = document.querySelector("#tbody");
+                    console.log(tbodyResponse.innerHTML);
+                    tbodyPagina.innerHTML = tbodyResponse.innerHTML;
+
+
+                })
+                .catch(function (error) {
+                    // Lógica de tratamento de erros
+                    console.error(error);
+                });
+    });
+}
 
 function eventButtonLogout() {
     document.getElementById('formLogout').submit();
@@ -107,7 +154,6 @@ function selectAccount(card) {
             .then(function (data) {
                 // Lógica de tratamento da resposta da servlet
                 location.reload();
-                console.log(data);
             })
             .catch(function (error) {
                 // Lógica de tratamento de erros
@@ -155,9 +201,14 @@ function getTransacoes() {
                     //Verifica se as listagem de transações são iguais...
                     if (tbodyResponse.innerHTML === tbodyPagina.innerHTML) {
                     } else {
-                        tbodyPagina.innerHTML = tbodyResponse.innerHTML;
-                        emitirSomDoSistema();
+                        var campoPesquisa = document.getElementById("campoPesquisa");
+                        var textoPesquisa = campoPesquisa.value.toLowerCase();
+                        if(textoPesquisa === ""){
+                            tbodyPagina.innerHTML = tbodyResponse.innerHTML;
+                            emitirSomDoSistema();
+                        }
                         
+
 
                     }
 
